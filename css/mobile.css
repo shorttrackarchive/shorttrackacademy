@@ -20,13 +20,11 @@ body.sta-mobile main{
   padding:calc(6px + env(safe-area-inset-top)) calc(6px + env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) calc(6px + env(safe-area-inset-left));
   display:grid;
   grid-template-columns:minmax(250px,34vw) minmax(360px,1fr) 88px;
-  grid-template-rows:38px auto;
+  grid-template-rows:38px minmax(0,1fr);
   gap:6px;
-  overflow-x:hidden;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
+  overflow:hidden;
   overscroll-behavior:contain;
-  align-items:start;
+  align-items:stretch;
 }
 
 body.sta-mobile .top-actions{
@@ -35,7 +33,7 @@ body.sta-mobile .top-actions{
   position:static !important;
   inset:auto !important;
   order:0 !important;
-  z-index:auto !important;
+  z-index:40 !important;
   min-width:0;
   height:38px !important;
   margin:0;
@@ -67,16 +65,17 @@ body.sta-mobile .btn{
 body.sta-mobile .mobile-panel-nav{
   grid-column:3;
   grid-row:1 / 3;
-  position:sticky !important;
+  position:static !important;
   inset:auto !important;
-  top:calc(6px + env(safe-area-inset-top)) !important;
+  top:auto !important;
   bottom:auto !important;
   display:grid;
   grid-auto-rows:minmax(34px,max-content);
   align-content:start;
   gap:6px;
   min-height:0;
-  max-height:calc(var(--sta-vh,100dvh) - 12px);
+  height:100%;
+  max-height:none;
   overflow:auto;
   padding:6px;
   border:1px solid var(--line);
@@ -98,23 +97,27 @@ body.sta-mobile .game-shell{
   grid-row:2;
   min-width:0;
   min-height:0;
-  height:auto;
-  min-height:calc(var(--sta-vh,100dvh) - 56px);
+  height:100%;
   display:grid;
   grid-template-columns:minmax(250px,34vw) minmax(360px,1fr);
   grid-template-rows:auto;
   gap:6px;
   align-items:start;
   align-content:start;
-  overflow:visible !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding-right:2px;
 }
 
 body.sta-mobile .scene-card{
   position:sticky;
-  top:calc(50px + env(safe-area-inset-top));
+  top:0;
+  align-self:start;
   min-height:0;
   height:auto;
-  max-height:calc(var(--sta-vh,100dvh) - 58px);
+  max-height:none;
   margin:0;
   padding:0;
   border-radius:18px;
@@ -233,7 +236,7 @@ body.sta-mobile .quick-stat .value{font-size:17px}
 body.sta-mobile .game-shell>section{
   min-width:0;
   min-height:0;
-  height:auto;
+  height:max-content;
   display:flex;
   flex-direction:column;
   gap:6px;
@@ -646,41 +649,41 @@ body.sta-mobile .week-result-item{
 }
 
 body.sta-mobile .week-training-grid{
-  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-  gap:6px !important;
-  margin:6px 0 8px !important;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr)) !important;
+  gap:12px !important;
+  margin:12px 0 14px !important;
 }
 
 body.sta-mobile .week-training-card{
-  border-radius:12px !important;
+  border-radius:18px !important;
 }
 
 body.sta-mobile .week-training-card img,
 body.sta-mobile .week-training-card .empty-image{
-  aspect-ratio:16/9 !important;
-  max-height:74px !important;
+  aspect-ratio:4/5 !important;
+  max-height:none !important;
 }
 
 body.sta-mobile .week-training-card .content{
-  padding:6px 7px 7px !important;
+  padding:10px 11px 12px !important;
 }
 
 body.sta-mobile .week-training-badge{
-  margin-bottom:4px !important;
-  padding:2px 6px !important;
-  font-size:9px !important;
+  margin-bottom:7px !important;
+  padding:4px 8px !important;
+  font-size:11px !important;
 }
 
 body.sta-mobile .week-training-card strong{
-  margin-bottom:3px !important;
-  font-size:10.5px !important;
-  line-height:1.22 !important;
+  margin-bottom:5px !important;
+  font-size:14px !important;
+  line-height:1.35 !important;
 }
 
 body.sta-mobile .week-training-card .meta,
 body.sta-mobile .week-training-note{
-  font-size:9.5px !important;
-  line-height:1.28 !important;
+  font-size:12px !important;
+  line-height:1.5 !important;
 }
 
 body.sta-mobile .form-grid{grid-template-columns:repeat(2,1fr)}
@@ -712,9 +715,215 @@ body.sta-mobile .mobile-info-body .ending-grid{
   gap:6px;
 }
 
-body.sta-mobile .mobile-info-body .stats-grid{grid-template-columns:1fr}
+body.sta-mobile .mobile-info-body .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 body.sta-mobile .mobile-info-body .gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 body.sta-mobile .mobile-info-body .log-list{max-height:70dvh;overflow:auto}
+
+body.sta-mobile #shopModal .modal-card,
+body.sta-mobile #socialModal .modal-card,
+body.sta-mobile #endingModal .modal-card,
+body.sta-mobile #newGameModal .modal-card,
+body.sta-mobile #mobileInfoModal .modal-card{
+  font-size:10.5px;
+  line-height:1.35;
+}
+
+body.sta-mobile #shopModal .modal-card p,
+body.sta-mobile #socialModal .modal-card p,
+body.sta-mobile #endingModal .modal-card p,
+body.sta-mobile #newGameModal .modal-card p{
+  margin-bottom:7px !important;
+  font-size:10.5px !important;
+  line-height:1.38 !important;
+}
+
+body.sta-mobile #shopModal .modal-scene,
+body.sta-mobile #socialModal .modal-scene{
+  margin:5px 0;
+  padding:6px 8px;
+  font-size:10.5px !important;
+}
+
+body.sta-mobile #shopModal .shop-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin-top:6px;
+}
+
+body.sta-mobile #shopModal .shop-active-bonus,
+body.sta-mobile #shopModal .shop-item{
+  padding:7px;
+  border-radius:12px;
+  font-size:10px;
+  line-height:1.32;
+}
+
+body.sta-mobile #shopModal .shop-active-bonus{
+  grid-column:1 / -1;
+  border:1px solid var(--line);
+  background:#fbfdff;
+}
+
+body.sta-mobile #shopModal .shop-item strong,
+body.sta-mobile #shopModal .shop-active-bonus strong{
+  margin-bottom:3px;
+  font-size:11.5px;
+}
+
+body.sta-mobile #shopModal .shop-item .price,
+body.sta-mobile #shopModal .shop-bonus,
+body.sta-mobile #shopModal .shop-active-bonus span{
+  margin:4px 0;
+  font-size:9.5px;
+  line-height:1.3;
+}
+
+body.sta-mobile #shopModal .shop-item .btn{
+  min-height:28px;
+  padding:5px 8px;
+  font-size:10px;
+}
+
+body.sta-mobile #socialModal .social-grid,
+body.sta-mobile #endingModal .ending-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+body.sta-mobile #socialModal .social-box,
+body.sta-mobile #endingModal .ending-box{
+  min-height:0;
+  padding:7px;
+  border-radius:12px;
+  font-size:10px;
+  line-height:1.32;
+}
+
+body.sta-mobile #socialModal .social-box .label,
+body.sta-mobile #endingModal .ending-box .label{
+  margin-bottom:3px;
+  font-size:9px;
+  line-height:1.25;
+}
+
+body.sta-mobile #socialModal .social-box .value,
+body.sta-mobile #endingModal .ending-box .value{
+  font-size:11.5px;
+  line-height:1.25;
+}
+
+body.sta-mobile #newGameModal .form-grid{
+  gap:6px;
+  margin:6px 0;
+}
+
+body.sta-mobile #newGameModal label{
+  margin-bottom:3px;
+  font-size:9.5px;
+}
+
+body.sta-mobile #newGameModal input,
+body.sta-mobile #newGameModal select{
+  min-height:32px;
+  padding:6px 8px;
+  border-radius:10px;
+  font-size:11.5px;
+}
+
+body.sta-mobile #newGameModal .generated-box{
+  max-height:88px;
+  margin-top:6px;
+  padding:7px;
+  border-radius:12px;
+  overflow:auto;
+  font-size:10.5px;
+  line-height:1.32;
+}
+
+body.sta-mobile #newGameModal .choice-result h3{
+  margin-bottom:5px;
+  font-size:12.5px;
+}
+
+body.sta-mobile #newGameModal .change-list{
+  gap:4px;
+  margin-top:6px;
+}
+
+body.sta-mobile #newGameModal .change-list li{
+  padding:5px 7px;
+  border-radius:10px;
+  font-size:10px;
+  line-height:1.28;
+}
+
+body.sta-mobile #newGameModal .schedule-actions{
+  margin-top:6px;
+  gap:5px;
+}
+
+body.sta-mobile #newGameModal .schedule-actions .btn{
+  min-height:30px;
+  padding:6px 8px;
+  font-size:10.5px;
+}
+
+body.sta-mobile .mobile-info-body{
+  font-size:10.5px;
+  line-height:1.35;
+}
+
+body.sta-mobile .mobile-info-body .card{
+  padding:6px;
+  border-radius:12px;
+}
+
+body.sta-mobile .mobile-info-body .card h2{
+  margin-bottom:5px;
+  font-size:12px !important;
+}
+
+body.sta-mobile .mobile-info-body .profile-grid,
+body.sta-mobile .mobile-info-body .record-grid,
+body.sta-mobile .mobile-info-body .life-grid,
+body.sta-mobile .mobile-info-body .social-grid,
+body.sta-mobile .mobile-info-body .ending-grid,
+body.sta-mobile .mobile-info-body .stats-grid,
+body.sta-mobile .mobile-info-body .ethics-grid{
+  gap:5px;
+}
+
+body.sta-mobile .mobile-info-body .profile-box,
+body.sta-mobile .mobile-info-body .stat-box,
+body.sta-mobile .mobile-info-body .record-box,
+body.sta-mobile .mobile-info-body .life-box,
+body.sta-mobile .mobile-info-body .social-box,
+body.sta-mobile .mobile-info-body .ending-box,
+body.sta-mobile .mobile-info-body .ethics-card{
+  min-height:0;
+  padding:6px;
+  border-radius:10px;
+  font-size:10px;
+  line-height:1.3;
+}
+
+body.sta-mobile .mobile-info-body .label{
+  margin-bottom:3px;
+  font-size:9px !important;
+  line-height:1.25;
+}
+
+body.sta-mobile .mobile-info-body .value{
+  font-size:11px !important;
+  line-height:1.25;
+}
+
+body.sta-mobile .mobile-info-body .story-strip,
+body.sta-mobile .mobile-info-body .equipment-row,
+body.sta-mobile .mobile-info-body .log-list{
+  font-size:10px;
+  line-height:1.35;
+}
 
 #mobileOrientationGate{
   position:fixed;
@@ -767,44 +976,51 @@ body.sta-mobile.sta-portrait main{filter:blur(7px);pointer-events:none}
 @media (max-height:480px) and (orientation:landscape){
   body.sta-mobile main{
     grid-template-columns:minmax(220px,31vw) minmax(330px,1fr) 78px;
-    grid-template-rows:38px auto;
+    grid-template-rows:38px minmax(0,1fr);
     gap:5px;
     padding:5px;
+    overflow:hidden;
   }
   body.sta-mobile .top-actions{height:38px}
-  body.sta-mobile .mobile-panel-nav{padding:5px;gap:5px}
+  body.sta-mobile .mobile-panel-nav{height:100%;padding:5px;gap:5px}
   body.sta-mobile .mobile-panel-nav .btn{min-height:32px;font-size:11px}
-  body.sta-mobile .scene{height:clamp(180px,calc(var(--sta-vh,100dvh) - 108px),320px)}
+  body.sta-mobile .scene{height:clamp(158px,calc(var(--sta-vh,100dvh) - 148px),220px)}
   body.sta-mobile .quick-stats{height:54px}
   body.sta-mobile .avatar-wrap{transform:translateX(-50%) scale(.62);bottom:62px}
   body.sta-mobile .avatar-wrap.portrait-mode{
-    width:124px !important;
-    height:142px !important;
-    bottom:50px !important;
+    width:116px !important;
+    height:132px !important;
+    bottom:20px !important;
     transform:translateX(-50%) !important;
   }
   body.sta-mobile .scene-portrait{
-    width:104px !important;
-    max-width:104px !important;
-    height:132px !important;
-    max-height:132px !important;
+    width:96px !important;
+    max-width:96px !important;
+    height:122px !important;
+    max-height:122px !important;
+  }
+  body.sta-mobile .dialogue{
+    display:none;
   }
   body.sta-mobile .dialogue-text{max-height:44px}
   body.sta-mobile .game-shell{
     grid-template-columns:minmax(220px,31vw) minmax(330px,1fr);
     grid-template-rows:auto;
-    height:auto;
-    min-height:calc(var(--sta-vh,100dvh) - 48px);
+    height:100%;
+    min-height:0;
     align-items:start !important;
     align-content:start !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
   }
   body.sta-mobile .scene-card{
     height:auto !important;
     min-height:0 !important;
-    align-self:stretch !important;
+    align-self:start !important;
+    top:0 !important;
   }
   body.sta-mobile .game-shell>section{
-    height:auto;
+    height:max-content;
     min-height:0;
     overflow:visible;
   }
