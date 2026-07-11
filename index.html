@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>쇼트트랙 아카데미</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="title-wrap">
+      <h1>쇼트트랙 아카데미</h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="top-actions">
+      <button class="btn primary" onclick="openNewGameModal()">새 선수 만들기</button>
+      <button class="btn soft" onclick="saveGame(true)">저장</button>
+      <button class="btn soft" onclick="loadGame(true)">불러오기</button>
+      <button class="btn gold" onclick="openSaveModal()">저장 코드</button>
+      <button class="btn soft" onclick="openShopModal()">상점·장비</button>
+      <button class="btn soft" onclick="openSocialModal()">관계도</button>
+      <button class="btn soft" onclick="openEndingModal()">엔딩 후보</button>
+      <button class="btn soft" onclick="openHelpModal()">도움말</button>
+      <button class="btn danger" onclick="resetSavedGame()">초기화</button>
+    </div>
+
+    <div class="mobile-panel-nav">
+      <button class="btn soft" onclick="openMobilePanel('profile')">선수</button>
+      <button class="btn soft" onclick="openMobilePanel('stats')">스탯</button>
+      <button class="btn soft" onclick="openMobilePanel('records')">기록</button>
+      <button class="btn soft" onclick="openMobilePanel('life')">생활</button>
+      <button class="btn soft" onclick="openMobilePanel('ethics')">관계</button>
+      <button class="btn soft" onclick="openMobilePanel('ending')">엔딩</button>
+      <button class="btn soft" onclick="openMobilePanel('album')">앨범</button>
+      <button class="btn soft" onclick="openMobilePanel('log')">로그</button>
+    </div>
+
+    <div class="game-shell">
+      <aside class="card scene-card">
+        <div class="scene training" id="scene">
+          <div class="medal-spark"><span></span><span></span><span></span><span></span></div>
+          <div class="scene-label">
+            <div class="scene-title" id="sceneTitle">훈련장</div>
+            <div class="scene-week" id="sceneWeek">1년 차 1주</div>
+          </div>
+          <div class="avatar-wrap portrait-mode happy" id="avatarWrap">
+            <div class="avatar-shadow"></div>
+            <div class="avatar happy" id="avatar">
+              <div class="hair"></div>
+              <div class="head">
+                <div class="eye left"></div><div class="eye right"></div>
+                <div class="cheek left"></div><div class="cheek right"></div>
+                <div class="mouth"></div>
+              </div>
+              <div class="body"></div>
+              <div class="arm left"></div><div class="arm right"></div>
+              <div class="leg left"><div class="skate"></div></div>
+              <div class="leg right"><div class="skate"></div></div>
+            </div>
+            <img id="scenePortrait" class="scene-portrait" alt="선수 표정 이미지">
+          </div>
+          <div class="dialogue">
+            <div class="dialogue-name" id="dialogueName">코치</div>
+            <div class="dialogue-text" id="dialogueText">이번 주 일정을 정해 보자. 무리하면 빨리 성장하지만, 부상 위험도 커진다.</div>
+          </div>
+        </div>
+        <div class="quick-stats">
+          <div class="quick-stat"><div class="label">컨디션</div><div class="value" id="quickCondition">-</div></div>
+          <div class="quick-stat"><div class="label">피로도</div><div class="value" id="quickFatigue">-</div></div>
+          <div class="quick-stat"><div class="label">부상 위험</div><div class="value" id="quickInjury">-</div></div>
+        </div>
+      </aside>
+
+      <section>
+        <section class="card profile-card">
+          <h2>👤 선수 프로필</h2>
+          <div class="profile-compact">
+            <div class="profile-portrait-frame">
+              <img id="profilePortrait" alt="선수 프로필 표정">
+            </div>
+            <div class="profile-grid">
+              <div class="info-box"><div class="label">이름</div><div class="value" id="playerName">-</div></div>
+              <div class="info-box"><div class="label">성별·국가</div><div class="value" id="playerMeta">-</div></div>
+              <div class="info-box"><div class="label">시즌·주차</div><div class="value" id="seasonMeta">-</div></div>
+              <div class="info-box"><div class="label">현재 유형</div><div class="value" id="skaterProfile">-</div></div>
+              <div class="info-box"><div class="label">성격</div><div class="value" id="personalityValue">-</div></div>
+              <div class="info-box"><div class="label">숨은 특성</div><div class="value" id="hiddenTraitValue">-</div></div>
+              <div class="info-box"><div class="label">라이벌</div><div class="value" id="rivalValue">-</div></div>
+              <div class="info-box"><div class="label">코치·팀</div><div class="value" id="coachValue">기본 코치</div></div>
+            </div>
+          </div>
+          <div class="profile-character-note">
+            <div class="expression-pill" id="expressionLabel">현재 표정 · 기본</div>
+            <div class="title">주인공 캐릭터</div>
+            <div class="desc" id="profilePortraitDesc">현재 컨디션과 상황에 따라 표정이 바뀝니다. 이벤트 화면에서도 사용자 제작 표정 이미지를 사용합니다.</div>
+          </div>
+          <div id="seasonEndBox" class="season-end hidden"></div>
+        </section>
+<section class="card">
+          <h2>📅 이번 주 일정표</h2>
+          <div class="mobile-task-hint">이번 주 핵심: 컨디션·피로·부상위험을 확인하고 3개 일정을 고르세요. 대회 주간에는 대회 카드부터 확인하는 것이 좋습니다.</div>
+          <div class="schedule-board">
+            <div class="slot">
+              <div class="slot-num">1</div>
+              <div class="activity-picker">
+                <div class="chosen-activity" id="chosenActivity1">일정 선택</div>
+                <div class="category-buttons" id="categoryButtons1"></div>
+                <div class="activity-menu hidden" id="activityMenu1"></div>
+                <select id="activity1" class="activity-select-hidden" onchange="updateActivityHelp()"></select>
+              </div>
+              <select id="intensity1">
+                <option value="light">가볍게</option>
+                <option value="normal" selected>보통</option>
+                <option value="hard">강하게</option>
+              </select>
+            </div>
+            <div class="slot">
+              <div class="slot-num">2</div>
+              <div class="activity-picker">
+                <div class="chosen-activity" id="chosenActivity2">일정 선택</div>
+                <div class="category-buttons" id="categoryButtons2"></div>
+                <div class="activity-menu hidden" id="activityMenu2"></div>
+                <select id="activity2" class="activity-select-hidden" onchange="updateActivityHelp()"></select>
+              </div>
+              <select id="intensity2">
+                <option value="light">가볍게</option>
+                <option value="normal" selected>보통</option>
+                <option value="hard">강하게</option>
+              </select>
+            </div>
+            <div class="slot">
+              <div class="slot-num">3</div>
+              <div class="activity-picker">
+                <div class="chosen-activity" id="chosenActivity3">일정 선택</div>
+                <div class="category-buttons" id="categoryButtons3"></div>
+                <div class="activity-menu hidden" id="activityMenu3"></div>
+                <select id="activity3" class="activity-select-hidden" onchange="updateActivityHelp()"></select>
+              </div>
+              <select id="intensity3">
+                <option value="light">가볍게</option>
+                <option value="normal" selected>보통</option>
+                <option value="hard">강하게</option>
+              </select>
+            </div>
+          </div>
+          <div class="activity-help" id="activityHelp">일정 3개를 골라 이번 주를 진행하세요.</div>
+          <div class="schedule-actions">
+            <button class="btn soft" onclick="autoPlan('balanced')">균형 추천</button>
+            <button class="btn soft" onclick="autoPlan('race')">대회 준비 추천</button>
+            <button class="btn soft" onclick="autoPlan('rest')">회복 추천</button>
+            <button class="btn primary" onclick="advanceWeek()">이번 주 진행</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>🏟️ 시즌 대회 캘린더</h2>
+          <div id="competitionPanel"></div>
+        </section>
+
+        <section class="card">
+          <h2>📊 능력치</h2>
+          <div class="stats-grid" id="statsBox"></div>
+        </section>
+
+        <section class="card">
+          <h2>🏅 기록·메달</h2>
+          <div class="record-grid">
+            <div class="record-box"><div class="label">500m 최고기록</div><div class="value" id="best500">-</div></div>
+            <div class="record-box"><div class="label">1000m 최고기록</div><div class="value" id="best1000">-</div></div>
+            <div class="record-box"><div class="label">1500m 최고기록</div><div class="value" id="best1500">-</div></div>
+            <div class="record-box"><div class="label">계주 최고 성적</div><div class="value" id="bestRelay">-</div></div>
+            <div class="record-box"><div class="label">금</div><div class="value" id="goldValue">0</div></div>
+            <div class="record-box"><div class="label">은</div><div class="value" id="silverValue">0</div></div>
+            <div class="record-box"><div class="label">동</div><div class="value" id="bronzeValue">0</div></div>
+            <div class="record-box"><div class="label">레전드 점수</div><div class="value" id="legendScore">0</div></div>
+          </div>
+        </section>
+
+
+
+
+
+        <section class="card">
+          <h2>🌟 생활·명성</h2>
+          <div class="life-grid">
+            <div class="life-box"><div class="label">보유 자금</div><div class="value" id="moneyValue">-</div></div>
+            <div class="life-box"><div class="label">명성</div><div class="value" id="fameValue">-</div></div>
+            <div class="life-box"><div class="label">팬</div><div class="value" id="fanValue">-</div></div>
+            <div class="life-box"><div class="label">스트레스</div><div class="value" id="stressValue">-</div></div>
+          </div>
+          <div class="story-strip" id="storyHint">아직 시즌이 시작되지 않았습니다.</div>
+          <div class="equipment-row" id="equipmentSummary"></div>
+        </section>
+
+        <section class="card">
+          <h2>🤝 인성·관계</h2>
+          <div class="ethics-grid" id="ethicsNetworkGrid"></div>
+        </section>
+
+        
+        <section class="card">
+          <h2>👑 현재 엔딩 후보</h2>
+          <div class="ending-grid" id="endingPreviewGrid"></div>
+        </section>
+
+        <section class="card">
+          <h2>🖼️ 추억 앨범</h2>
+          <div class="gallery-grid" id="galleryGrid"></div>
+        </section>
+
+        <section class="card">
+          <h2>📝 진행 로그</h2>
+          <div class="log-list" id="logList"></div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <div class="event-modal" id="newGameModal">
+    <div class="modal-card">
+      <h2>새 선수 만들기</h2>
+      <p>직접 정하는 것은 이름, 성별, 국가, 시작 나이뿐입니다. 성격·숨은 특성·초기 능력치는 랜덤으로 생성됩니다.</p>
+      <div class="form-grid">
+        <div><label>선수 이름</label><input id="newName" placeholder="예: 김하린"></div>
+        <div><label>성별</label><select id="newGender"><option value="Women">여자</option><option value="Men">남자</option></select></div>
+        <div><label>국가</label><select id="newCountry"><option value="KOR" selected>대한민국</option></select></div>
+        <div><label>시작 나이</label><select id="newAge"><option value="12">12세 꿈나무</option><option value="15" selected>15세 유망주</option><option value="18">18세 국가대표 후보</option></select></div>
+        <div class="difficulty-field"><label>난이도</label><select id="newDifficulty">
+          <option value="hard">하드 · 기존 낮은 초기 스탯</option>
+          <option value="normal" selected>노말 · 기본 추천</option>
+          <option value="easy">이지 · 높은 초기 스탯</option>
+        </select></div>
+      </div>
+      <div class="generated-box" id="generatedPreview">[선수 생성 미리보기] 버튼을 눌러 주세요.</div>
+      <div class="schedule-actions">
+        <button class="btn soft" onclick="previewCandidate()">선수 생성 미리보기</button>
+        <button class="btn primary" onclick="startNewGame()">이 선수로 시작</button>
+        <button class="btn" onclick="closeNewGameModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="eventModal">
+    <div class="modal-card">
+      <h2 id="eventTitle">이벤트</h2>
+      <div class="modal-scene" id="eventBody"></div>
+      <div class="choice-list" id="eventChoices"></div>
+    </div>
+  </div>
+
+
+  <div class="event-modal" id="weekModal">
+    <div class="modal-card">
+      <h2 id="weekModalTitle">이번 주 결과</h2>
+      <div class="modal-scene" id="weekModalBody"></div>
+      <div class="week-result-list" id="weekResultList"></div>
+      <div class="schedule-actions"><button class="btn primary" onclick="closeWeekModal()">확인</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal result-modal" id="competitionResultModal">
+    <div class="modal-card">
+      <h2 id="competitionResultTitle">대회 결과</h2>
+      <div class="competition-result-head" id="competitionResultSummary"></div>
+      <div class="week-result-list" id="competitionResultList"></div>
+      <div class="schedule-actions"><button class="btn primary" onclick="closeCompetitionResultModal()">확인</button></div>
+    </div>
+  </div>
+
+
+  <div class="event-modal mobile-info-modal" id="mobileInfoModal">
+    <div class="modal-card">
+      <h2 id="mobileInfoTitle">정보</h2>
+      <div class="mobile-info-body" id="mobileInfoBody"></div>
+      <div class="schedule-actions"><button class="btn primary" onclick="closeMobilePanel()">닫기</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="shopModal">
+    <div class="modal-card">
+      <h2>상점·장비</h2>
+      <p>장비를 구매하고 착용하면 경기와 부상 관리에 보정이 생깁니다. 프린세스메이커식으로 성장 단계에 따라 장비를 바꿔 보세요.</p>
+      <div class="modal-scene"><strong>현재 보유 자금:</strong> <span id="shopMoney">-</span></div>
+      <div class="shop-grid" id="shopGrid"></div>
+      <div class="schedule-actions"><button class="btn" onclick="closeShopModal()">닫기</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="socialModal">
+    <div class="modal-card">
+      <h2>관계도</h2>
+      <p>코치, 라이벌, 가족, 팀원과의 관계가 이벤트와 성장 방향에 영향을 줍니다.</p>
+      <div class="social-grid" id="socialModalGrid"></div>
+      <div class="modal-scene" id="socialAdvice"></div>
+      <div class="schedule-actions"><button class="btn" onclick="closeSocialModal()">닫기</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="endingModal">
+    <div class="modal-card">
+      <h2>엔딩 후보</h2>
+      <p>현재 커리어 흐름을 바탕으로 가능한 엔딩을 미리 보여 줍니다. 여러 회차 플레이의 목표로 활용하세요.</p>
+      <div class="ending-grid" id="endingModalGrid"></div>
+      <div class="schedule-actions"><button class="btn" onclick="closeEndingModal()">닫기</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="helpModal">
+    <div class="modal-card">
+      <h2>도움말</h2>
+      <div class="week-result-list" id="helpModalList"></div>
+      <div class="schedule-actions"><button class="btn" onclick="closeHelpModal()">닫기</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="tutorialModal">
+    <div class="modal-card">
+      <h2>처음 시작 안내</h2>
+      <div class="modal-scene">
+        <strong>목표:</strong> 국가대표 선발과 국제대회 커리어를 쌓고, 2029-30 · 2033-34 · 2037-38 올림픽 시즌을 거쳐 최종 엔딩을 봅니다.<br>
+        <strong>기본 흐름:</strong> 한 주에 3개의 일정을 고르고, 피로·부상위험·컨디션을 관리하세요.<br>
+        <strong>추천:</strong> 15세 시작이 가장 균형 잡힌 기본 루트입니다. 12세는 빠르게 성장하고, 18세는 시작 능력은 높지만 성장 속도가 느립니다.<br>
+        <strong>핵심:</strong> 선발전 1~3위는 개인전과 혼성계주, 4~6위는 남녀계주 중심입니다.
+      </div>
+      <div class="schedule-actions"><button class="btn primary" onclick="closeTutorialModal()">시작하기</button></div>
+    </div>
+  </div>
+
+  <div class="event-modal" id="saveModal">
+    <div class="modal-card">
+      <h2>저장 코드 내보내기 / 불러오기</h2>
+      <p>저장 코드를 복사해 두면 다른 기기에서도 이어서 플레이할 수 있습니다.</p>
+      <textarea class="save-code" id="saveCodeBox" placeholder="저장 코드가 여기에 표시됩니다."></textarea>
+      <div class="schedule-actions">
+        <button class="btn soft" onclick="exportSaveCode()">현재 저장 코드 만들기</button>
+        <button class="btn primary" onclick="importSaveCode()">저장 코드 불러오기</button>
+        <button class="btn" onclick="closeSaveModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
