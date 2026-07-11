@@ -20,6 +20,14 @@
     return window.innerWidth >= window.innerHeight;
   }
 
+  function syncViewportSize(){
+    const viewport = window.visualViewport;
+    const width = Math.round(viewport?.width || window.innerWidth);
+    const height = Math.round(viewport?.height || window.innerHeight);
+    document.documentElement.style.setProperty("--sta-vw", `${width}px`);
+    document.documentElement.style.setProperty("--sta-vh", `${height}px`);
+  }
+
   function ensureOrientationGate(){
     if(document.getElementById("mobileOrientationGate")) return;
     const gate = document.createElement("div");
@@ -44,6 +52,21 @@
         img.classList.add("image-load-error");
       }, { once:true });
     });
+  }
+
+  function ensureMobileActionButtons(){
+    const actions = document.querySelector(".top-actions");
+    if(!actions || document.getElementById("mobileAdvanceWeekButton")) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.id = "mobileAdvanceWeekButton";
+    button.className = "btn primary mobile-week-action";
+    button.textContent = "이번 주 진행";
+    button.addEventListener("click", ()=>{
+      if(typeof window.advanceWeek === "function") window.advanceWeek();
+      requestLandscapeLock();
+    });
+    actions.prepend(button);
   }
 
   function setupIntensityControls(){
@@ -116,12 +139,14 @@
   function enhanceMobileUi(){
     if(!document.body.classList.contains(MOBILE_CLASS)) return;
     if(typeof window.initMobileMainLayout === "function") window.initMobileMainLayout();
+    ensureMobileActionButtons();
     setupIntensityControls();
     syncIntensityControls();
     optimizeImages();
   }
 
   function applyMode(){
+    syncViewportSize();
     const mobile = wantsMobile();
     document.body.classList.toggle(MOBILE_CLASS, mobile);
     if(!mobile){
@@ -142,6 +167,8 @@
     hookGlobalRender();
     applyMode();
     window.addEventListener("resize", applyMode, { passive:true });
+    window.visualViewport?.addEventListener("resize", applyMode, { passive:true });
+    window.visualViewport?.addEventListener("scroll", applyMode, { passive:true });
     window.addEventListener("orientationchange", ()=>setTimeout(applyMode, 120), { passive:true });
     document.addEventListener("visibilitychange", applyMode);
     document.addEventListener("click", requestLandscapeLock, { once:true, passive:true });
