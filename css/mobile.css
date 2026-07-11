@@ -20,9 +20,13 @@ body.sta-mobile main{
   padding:calc(6px + env(safe-area-inset-top)) calc(6px + env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) calc(6px + env(safe-area-inset-left));
   display:grid;
   grid-template-columns:minmax(250px,34vw) minmax(360px,1fr) 88px;
-  grid-template-rows:38px minmax(0,1fr);
+  grid-template-rows:38px auto;
   gap:6px;
-  overflow:hidden;
+  overflow-x:hidden;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  align-items:start;
 }
 
 body.sta-mobile .top-actions{
@@ -63,13 +67,16 @@ body.sta-mobile .btn{
 body.sta-mobile .mobile-panel-nav{
   grid-column:3;
   grid-row:1 / 3;
-  position:static !important;
+  position:sticky !important;
   inset:auto !important;
+  top:calc(6px + env(safe-area-inset-top)) !important;
+  bottom:auto !important;
   display:grid;
   grid-auto-rows:minmax(34px,max-content);
   align-content:start;
   gap:6px;
   min-height:0;
+  max-height:calc(var(--sta-vh,100dvh) - 12px);
   overflow:auto;
   padding:6px;
   border:1px solid var(--line);
@@ -91,20 +98,23 @@ body.sta-mobile .game-shell{
   grid-row:2;
   min-width:0;
   min-height:0;
-  height:100%;
+  height:auto;
+  min-height:calc(var(--sta-vh,100dvh) - 56px);
   display:grid;
   grid-template-columns:minmax(250px,34vw) minmax(360px,1fr);
-  grid-template-rows:minmax(0,1fr);
+  grid-template-rows:auto;
   gap:6px;
-  align-items:stretch;
-  align-content:stretch;
+  align-items:start;
+  align-content:start;
+  overflow:visible !important;
 }
 
 body.sta-mobile .scene-card{
-  position:relative;
-  top:auto;
+  position:sticky;
+  top:calc(50px + env(safe-area-inset-top));
   min-height:0;
-  height:100%;
+  height:auto;
+  max-height:calc(var(--sta-vh,100dvh) - 58px);
   margin:0;
   padding:0;
   border-radius:18px;
@@ -113,7 +123,7 @@ body.sta-mobile .scene-card{
 
 body.sta-mobile .scene{
   min-height:0;
-  height:calc(100% - 62px);
+  height:clamp(170px,calc(var(--sta-vh,100dvh) - 134px),330px);
   padding:10px;
 }
 
@@ -134,6 +144,55 @@ body.sta-mobile .scene-week{
 body.sta-mobile .avatar-wrap{
   bottom:74px;
   transform:translateX(-50%) scale(.72);
+}
+
+body.sta-mobile .avatar-wrap.portrait-mode{
+  width:132px !important;
+  height:158px !important;
+  min-height:0 !important;
+  bottom:56px !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:flex-end !important;
+  justify-content:center !important;
+  transform:translateX(-50%) !important;
+}
+
+body.sta-mobile .avatar-wrap.portrait-mode.happy{transform:translateX(-50%) translateY(-2px) !important}
+body.sta-mobile .avatar-wrap.portrait-mode.tired{transform:translateX(-50%) rotate(-1deg) translateY(4px) !important}
+body.sta-mobile .avatar-wrap.portrait-mode.injured{transform:translateX(-50%) rotate(-2deg) translateY(5px) !important}
+
+body.sta-mobile .avatar-wrap.portrait-mode .avatar-shadow{
+  display:none !important;
+}
+
+body.sta-mobile .avatar-wrap.portrait-mode .avatar{
+  display:block !important;
+  width:86px !important;
+  height:132px !important;
+  bottom:0 !important;
+  transform:translateX(-50%) scale(.66) !important;
+  transform-origin:bottom center;
+}
+
+body.sta-mobile .avatar-wrap.portrait-mode:has(.scene-portrait[src]:not([src=""])) .avatar{
+  display:none !important;
+}
+
+body.sta-mobile .scene-portrait{
+  width:112px !important;
+  max-width:112px !important;
+  height:142px !important;
+  max-height:148px !important;
+  padding:4px !important;
+  border-radius:16px !important;
+  object-fit:cover !important;
+  object-position:50% 18% !important;
+}
+
+body.sta-mobile .scene-portrait:not([src]),
+body.sta-mobile .scene-portrait[src=""]{
+  display:none !important;
 }
 
 body.sta-mobile .avatar-wrap.happy{transform:translateX(-50%) scale(.72) translateY(-4px)}
@@ -174,11 +233,11 @@ body.sta-mobile .quick-stat .value{font-size:17px}
 body.sta-mobile .game-shell>section{
   min-width:0;
   min-height:0;
-  height:100%;
-  display:grid;
-  grid-template-rows:minmax(206px,1fr) minmax(48px,.25fr);
+  height:auto;
+  display:flex;
+  flex-direction:column;
   gap:6px;
-  overflow:hidden;
+  overflow:visible;
 }
 
 body.sta-mobile .game-shell>section>.card{
@@ -188,7 +247,7 @@ body.sta-mobile .game-shell>section>.card{
   padding:10px;
   border-radius:18px;
   box-shadow:0 10px 24px rgba(15,23,42,.10);
-  overflow:auto;
+  overflow:visible;
 }
 
 body.sta-mobile .game-shell>section>.card.mobile-main-schedule,
@@ -209,16 +268,16 @@ body.sta-mobile .mobile-task-hint{
 }
 
 body.sta-mobile .schedule-board{
-  flex:1 1 auto;
+  flex:0 0 auto;
   min-height:0;
   display:grid;
-  grid-template-rows:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(52px,auto));
   gap:5px;
   padding:0 !important;
   border:0 !important;
   border-radius:0 !important;
   background:transparent !important;
-  overflow:hidden !important;
+  overflow:visible !important;
 }
 
 body.sta-mobile .game-shell>section>.card.mobile-main-schedule .activity-help,
@@ -227,7 +286,7 @@ body.sta-mobile .game-shell>section>.card.mobile-main-schedule .schedule-actions
 }
 
 body.sta-mobile .slot{
-  min-height:0;
+  min-height:52px;
   display:grid;
   grid-template-columns:24px minmax(0,1fr) 142px;
   gap:5px;
@@ -480,21 +539,152 @@ body.sta-mobile .season-row{
 
 body.sta-mobile .event-modal{
   padding:8px calc(8px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));
-  align-items:stretch;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
 }
 
 body.sta-mobile .event-modal .modal-card{
-  width:100%;
+  width:min(100%,calc(var(--sta-vw,100vw) - 16px));
   max-width:none;
-  max-height:none;
-  height:100%;
-  padding:12px;
-  border-radius:18px;
+  max-height:calc(var(--sta-vh,100dvh) - 16px);
+  height:auto;
+  padding:10px;
+  border-radius:16px;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
-body.sta-mobile .modal-card h2{font-size:18px}
+body.sta-mobile .modal-card h2{
+  font-size:16px !important;
+  margin:0 0 6px !important;
+  line-height:1.18;
+  letter-spacing:0;
+}
+
+body.sta-mobile .modal-card p,
+body.sta-mobile .modal-scene,
+body.sta-mobile .choice-btn{
+  font-size:11px;
+  line-height:1.42;
+}
+
+body.sta-mobile .modal-scene{
+  margin:6px 0;
+  padding:8px;
+  border-radius:14px;
+}
+
+body.sta-mobile .event-art{
+  grid-template-columns:82px minmax(0,1fr) !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+
+body.sta-mobile .event-art .event-portrait{
+  max-width:82px !important;
+  padding:5px !important;
+  border-radius:16px !important;
+  align-self:center;
+}
+
+body.sta-mobile .event-portrait-image{
+  width:62px !important;
+  max-width:62px !important;
+  max-height:78px !important;
+  padding:3px !important;
+  border-radius:12px !important;
+}
+
+body.sta-mobile .event-portrait-note{
+  max-width:70px;
+  padding:2px 5px !important;
+  font-size:8.5px !important;
+  line-height:1.18 !important;
+  white-space:normal;
+  text-align:center;
+}
+
+body.sta-mobile .event-art .event-badge{
+  width:26px !important;
+  height:26px !important;
+  right:-4px !important;
+  top:-6px !important;
+  font-size:14px !important;
+}
+
+body.sta-mobile .event-art .event-speaker,
+body.sta-mobile .speech-tag{
+  font-size:9.5px !important;
+  line-height:1.15 !important;
+}
+
+body.sta-mobile .speech-tag{
+  padding:3px 7px !important;
+}
+
+body.sta-mobile .event-quote{
+  font-size:12px !important;
+  line-height:1.34 !important;
+}
+
+body.sta-mobile .event-art .event-body-text{
+  font-size:11px !important;
+  line-height:1.42 !important;
+}
+
+body.sta-mobile .week-result-list{
+  gap:6px !important;
+  margin-top:6px !important;
+}
+
+body.sta-mobile .week-result-item{
+  padding:7px 8px !important;
+  border-radius:12px !important;
+  font-size:10.5px !important;
+  line-height:1.35 !important;
+}
+
+body.sta-mobile .week-training-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:6px !important;
+  margin:6px 0 8px !important;
+}
+
+body.sta-mobile .week-training-card{
+  border-radius:12px !important;
+}
+
+body.sta-mobile .week-training-card img,
+body.sta-mobile .week-training-card .empty-image{
+  aspect-ratio:16/9 !important;
+  max-height:74px !important;
+}
+
+body.sta-mobile .week-training-card .content{
+  padding:6px 7px 7px !important;
+}
+
+body.sta-mobile .week-training-badge{
+  margin-bottom:4px !important;
+  padding:2px 6px !important;
+  font-size:9px !important;
+}
+
+body.sta-mobile .week-training-card strong{
+  margin-bottom:3px !important;
+  font-size:10.5px !important;
+  line-height:1.22 !important;
+}
+
+body.sta-mobile .week-training-card .meta,
+body.sta-mobile .week-training-note{
+  font-size:9.5px !important;
+  line-height:1.28 !important;
+}
+
 body.sta-mobile .form-grid{grid-template-columns:repeat(2,1fr)}
-body.sta-mobile .choice-btn{min-height:38px;padding:9px 10px}
+body.sta-mobile .choice-btn{min-height:34px;padding:7px 9px}
 
 body.sta-mobile .mobile-info-modal .modal-card{
   max-width:none;
@@ -577,33 +767,46 @@ body.sta-mobile.sta-portrait main{filter:blur(7px);pointer-events:none}
 @media (max-height:480px) and (orientation:landscape){
   body.sta-mobile main{
     grid-template-columns:minmax(220px,31vw) minmax(330px,1fr) 78px;
-    grid-template-rows:38px minmax(0,1fr);
+    grid-template-rows:38px auto;
     gap:5px;
     padding:5px;
   }
   body.sta-mobile .top-actions{height:38px}
   body.sta-mobile .mobile-panel-nav{padding:5px;gap:5px}
   body.sta-mobile .mobile-panel-nav .btn{min-height:32px;font-size:11px}
-  body.sta-mobile .scene{height:calc(100% - 54px)}
+  body.sta-mobile .scene{height:clamp(180px,calc(var(--sta-vh,100dvh) - 108px),320px)}
   body.sta-mobile .quick-stats{height:54px}
   body.sta-mobile .avatar-wrap{transform:translateX(-50%) scale(.62);bottom:62px}
+  body.sta-mobile .avatar-wrap.portrait-mode{
+    width:124px !important;
+    height:142px !important;
+    bottom:50px !important;
+    transform:translateX(-50%) !important;
+  }
+  body.sta-mobile .scene-portrait{
+    width:104px !important;
+    max-width:104px !important;
+    height:132px !important;
+    max-height:132px !important;
+  }
   body.sta-mobile .dialogue-text{max-height:44px}
   body.sta-mobile .game-shell{
     grid-template-columns:minmax(220px,31vw) minmax(330px,1fr);
-    grid-template-rows:minmax(0,1fr);
-    height:100%;
-    align-items:stretch !important;
-    align-content:stretch !important;
+    grid-template-rows:auto;
+    height:auto;
+    min-height:calc(var(--sta-vh,100dvh) - 48px);
+    align-items:start !important;
+    align-content:start !important;
   }
   body.sta-mobile .scene-card{
-    height:100% !important;
+    height:auto !important;
     min-height:0 !important;
     align-self:stretch !important;
   }
   body.sta-mobile .game-shell>section{
-    grid-template-rows:minmax(0,1fr) 48px !important;
-    height:100%;
+    height:auto;
     min-height:0;
+    overflow:visible;
   }
   body.sta-mobile .game-shell>section>.card.mobile-main-schedule,
   body.sta-mobile .game-shell>section>.card.mobile-main-competition{
@@ -611,11 +814,12 @@ body.sta-mobile.sta-portrait main{filter:blur(7px);pointer-events:none}
   }
   body.sta-mobile .game-shell>section>.card.mobile-main-competition{
     padding:7px 9px;
-    overflow:hidden;
+    overflow:visible;
   }
   body.sta-mobile .slot{
     grid-template-columns:24px minmax(0,1fr) 142px !important;
     padding:4px;
+    min-height:50px;
   }
   body.sta-mobile .activity-picker{
     gap:3px;
